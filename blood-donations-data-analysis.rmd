@@ -28,6 +28,7 @@ We can view the first couple of observations of the datasets below:
 ```{r, message=FALSE, warning=FALSE}
 # Set working directory
 getwd()
+library(tidyverse)
 
 # Import datasets; adjust if datasets are in a different directory
 testData = read.csv("data/testData.csv", header = TRUE)
@@ -43,19 +44,10 @@ Since `testData` is our testing data set, it does not have `Made Donation in Mar
 To make the data analysis a bit efficient, we will rename the variables:
 ```{r, message=FALSE, warning=FALSE}
 # Rename variables in testData
-colnames(testData)[1] <- "ID"
-colnames(testData)[2] <- "mosLastDo"
-colnames(testData)[3] <- "numDonations"
-colnames(testData)[4] <- "totVolDonated"
-colnames(testData)[5] <- "mosFirstDo"
+colnames(testData) <- c("ID", "mosLastDo", "numDonations", "totVolDonated", "mosFirstDo")
 
 # Rename variables in trainingData
-colnames(trainingData)[1] <- "ID"
-colnames(trainingData)[2] <- "mosLastDo"
-colnames(trainingData)[3] <- "numDonations"
-colnames(trainingData)[4] <- "totVol"
-colnames(trainingData)[5] <- "mosFirstDo"
-colnames(trainingData)[6] <- "madeDonation"
+colnames(trainingData) <- c("ID", "mosLastDo", "numDonations", "totVolDonated", "mosFirstDo", "madeDonation")
 
 # Display first rows of datasets
 head(trainingData)
@@ -64,3 +56,14 @@ head(testData)
 
 # Exploratory Data Analysis
 Since we are interested in whether the donor will donate again in March 2007, there are two possible outcomes: either they donate or do not donate. A logistic regression model is suitable for this, but we will first do some exploratory data analysis. Having a visual idea of the data will help us see if we need to do some transformations and see possible problems with our dataset.
+
+```{r, message=FALSE, warning=FALSE}
+# Turn madeDonation into factors instead of continuous
+trainingData$madeDonation <- factor(trainingData$madeDonation)
+
+contrasts(trainingData$madeDonation)
+
+# Boxplot
+ggplot(data = trainingData) + geom_boxplot(aes(x = madeDonation, y = numDonations))
+```
+
