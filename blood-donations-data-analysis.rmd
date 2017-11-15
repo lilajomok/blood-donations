@@ -1,0 +1,66 @@
+---
+title: "Predicting Blood Donations"
+author: "Lila Jomok"
+date: "November 14, 2017"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    #toc_float: true
+    #theme: simplex
+    variant: markdown_github
+---
+
+# About
+The main goal of this project is to work on and refine data analysis skills. We will be building a model to predict if a blood donor will donate within a given time window. 
+
+# Data
+The provided datasets, `trainingData.csv` and `testData.csv` contains the following variables:
+
+- `X1`: ID of donor.
+- `Months since Last Donation`: Number of months since the donor's most recent blood donation.
+- `Number of Donations`: Total number of donations the donor has made.
+- `Total Volume Donated`: Total amount of blood the donor has donated in cubic centimeters.
+- `Months since First Donation`: Number of months since the donor's first blood donation.
+- `Made Donation in March 2007`: The explanatory variable or result - `1` if they donated blood, `0` if they did not donate blood in March 2007.
+
+We can view the first couple of observations of the datasets below:
+```{r, message=FALSE, warning=FALSE}
+# Set working directory
+getwd()
+
+# Import datasets; adjust if datasets are in a different directory
+testData = read.csv("data/testData.csv", header = TRUE)
+trainingData = read.csv("data/trainingData.csv", header = TRUE)
+
+# Display first rows of datasets
+head(trainingData)
+head(testData)
+```
+Since `testData` is our testing data set, it does not have `Made Donation in March 2007` variable.
+
+## Renaming Variables
+To make the data analysis a bit efficient, we will rename the variables:
+```{r, message=FALSE, warning=FALSE}
+# Rename variables in testData
+colnames(testData)[1] <- "ID"
+colnames(testData)[2] <- "mosLastDo"
+colnames(testData)[3] <- "numDonations"
+colnames(testData)[4] <- "totVolDonated"
+colnames(testData)[5] <- "mosFirstDo"
+
+# Rename variables in trainingData
+colnames(trainingData)[1] <- "ID"
+colnames(trainingData)[2] <- "mosLastDo"
+colnames(trainingData)[3] <- "numDonations"
+colnames(trainingData)[4] <- "totVol"
+colnames(trainingData)[5] <- "mosFirstDo"
+colnames(trainingData)[6] <- "madeDonation"
+
+# Display first rows of datasets
+head(trainingData)
+head(testData)
+```
+
+# Exploratory Data Analysis
+Since we are interested in whether the donor will donate again in March 2007, there are two possible outcomes: either they donate or do not donate. A logistic regression model is suitable for this, but we will first do some exploratory data analysis. Having a visual idea of the data will help us see if we need to do some transformations and see possible problems with our dataset.
