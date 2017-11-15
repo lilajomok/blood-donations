@@ -44,10 +44,10 @@ Since `testData` is our testing data set, it does not have `Made Donation in Mar
 To make the data analysis a bit efficient, we will rename the variables:
 ```{r, message=FALSE, warning=FALSE}
 # Rename variables in testData
-colnames(testData) <- c("ID", "mosLastDo", "numDonations", "totVolDonated", "mosFirstDo")
+colnames(testData) <- c("ID", "mosLastDo", "numDonations", "totVol", "mosFirstDo")
 
 # Rename variables in trainingData
-colnames(trainingData) <- c("ID", "mosLastDo", "numDonations", "totVolDonated", "mosFirstDo", "madeDonation")
+colnames(trainingData) <- c("ID", "mosLastDo", "numDonations", "totVol", "mosFirstDo", "madeDonation")
 
 # Display first rows of datasets
 head(trainingData)
