@@ -162,10 +162,27 @@ head(testData2)
 We will create a new data frame `donateP` to store our predicted probabilities in.
 ```{r}
 # Create a base DF to be used in predictions
-newDF <- with(TD2, data.frame(ID = ID, mosLastDo = mean(mosLastDo), numDonations = mean(numDonations), totVol = mean(totVol), mosFirstDo = mean(mosFirstDo), donFreq = mean(donFreq), firstTime = factor(firstTime)))
-head(newDF)
+newDF <- with(testData2, data.frame(ID = ID, mosLastDo = mosLastDo, numDonations = numDonations,  mosFirstDo = mosFirstDo, donFreq = donFreq, firstTime = factor(firstTime)))
+# head(newDF)
 
 newDF$donateP <- predict(model01, newdata = newDF, type="response")
 head(newDF)
 ```
 
+## Submission
+After predictions, we will then use `dplyr` to create another data frame for our submission, which only includes the donor's `ID` and the predicted probability. 
+```{r}
+submissionData <- select(newDF, ID, donateP)
+colnames(submissionData) = c("X1", "Made Donation in March 2007") # rename columns to submission format
+
+# Save submissionData as CSV format
+write.csv(submissionData, file = "submissionData.csv")
+
+head(submissionData)
+```
+
+With our submission file created and exported, we are about done! All that is left is to submit it! 
+
+# Future Updates
+
+After the first submission, the next step in this project is to see whether we can improve the performance of our model.
