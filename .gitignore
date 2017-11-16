@@ -36,3 +36,5 @@ vignettes/*.pdf
 *.Rproj
 
 submissionData\.csv
+
+blood-donations-data-analysis\.md
