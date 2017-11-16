@@ -136,6 +136,36 @@ exp(cbind(OR = coef(model01), confint(model01)))
 
 For a unit increase in `mosLastDo`, the odds of donating in March 2007 increases by `0.9074839`.
 
-# Model Fitting
+# Goodness of Fit
 
 Before we can start predicting with our model, we will test the Full and Reduced models with a Likelihood Ratio Test.
+```{r}
+# Create reduced model
+model02 <- glm(madeDonation ~ mosLastDo + firstTime, family = binomial(link = 'logit'), data = TD2)
+summary(model02)
+
+# Likelihood Ratio test bt. Full and Reduced
+anova(model01, model02, test = "LRT")
+```
+A p-value of `2.569e-06` indicates that the full model is a better fit than the reduced model. Compared to the reduced model, the full model's AIC is slightly lower (`556.29` to `579.01`).
+
+# Predictions
+
+Before we can start predicting, we need to adjust `testData` with the same variables as `trainingData`.
+```{r}
+testData2 <- mutate(testData, donFreq = (mosFirstDo - mosLastDo) / numDonations)
+testData2 <- mutate(testData2, firstTime = ifelse(mosFirstDo == mosLastDo, "0", "1"))
+testData2$firstTime <- factor(testData2$firstTime)
+head(testData2)
+```
+
+We will create a new data frame `donateP` to store our predicted probabilities in.
+```{r}
+# Create a base DF to be used in predictions
+newDF <- with(TD2, data.frame(ID = ID, mosLastDo = mean(mosLastDo), numDonations = mean(numDonations), totVol = mean(totVol), mosFirstDo = mean(mosFirstDo), donFreq = mean(donFreq), firstTime = factor(firstTime)))
+head(newDF)
+
+newDF$donateP <- predict(model01, newdata = newDF, type="response")
+head(newDF)
+```
+
