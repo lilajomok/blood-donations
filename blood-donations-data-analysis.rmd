@@ -2,13 +2,11 @@
 title: "Predicting Blood Donations"
 author: "Lila Jomok"
 date: "November 14, 2017"
-output:
-  html_document:
-    toc: true
-    toc_depth: 3
-    toc_float: true
-    theme: spacelab
-    variant: markdown_github
+output: 
+   md_document: 
+      variant: markdown_github
+      toc: true
+      toc_depth: 3
 ---
 
 # About
