@@ -79,8 +79,20 @@ We can also create a new binary variable `firstTime` to indicate which donors ar
 ```{r}
 TD2 <- mutate(trainingData, donFreq = (mosFirstDo - mosLastDo) / numDonations)
 TD2 <- mutate(TD2, firstTime = ifelse(mosFirstDo == mosLastDo, "0", "1"))
+TD2$firstTime <- factor(TD2$firstTime) # turn into factors
 head(TD2)
 ```
 
+# Logistic Regression Analysis
 
+We will consider a simple logistic linear model for our data.
+```{r}
+model01 <- glm(madeDonation ~ mosLastDo + numDonations + mosFirstDo + donFreq + firstTime, family = binomial(link = 'logit'), data = TD2)
+summary(model01)
+```
+
+At the significance level of 0.05, `mosLastDo` and `firstTime` are statistically significant.
+
+- For every unit change in `mosLastDo`, the log odds of donating in March 2007 reduces by `0.09708`.
+- If the donor is a NOT first-time donor (`firstTime1`), the log odds of donating in March 2007 changes by `1.29274`.
 
