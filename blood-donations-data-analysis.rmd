@@ -73,9 +73,14 @@ plot04 <- ggplot(data = trainingData) + geom_boxplot(aes(x = madeDonation, y = m
 grid.arrange(plot01, plot02, plot03, plot04, ncol = 2)
 ```
 
-`numDonations` and `totVol` look similar, so we will take a look at the relationship between these two variables.
+`numDonations` and `totVol` look similar, which makes sense - the total amount of blood donated *should* increase as the number of donations increase. If we create a new variable that takes the average, `avgVolPerDo`, the average will be the same for each donor - 250 cubic centimeters. However, the number of donations varies among the donors, so we will create a variable `donFreq` which is the length of time between a donor's first and last donation divided by the total number of donations.
 
-## `numDonations` and `totVol`
-Below is the scatter plot between `numDonations` and `totVol`:
+We can also create a new binary variable `firstTime` to indicate which donors are donating for the first time.
+```{r}
+TD2 <- mutate(trainingData, donFreq = (mosFirstDo - mosLastDo) / numDonations)
+TD2 <- mutate(TD2, firstTime = ifelse(mosFirstDo == mosLastDo, "0", "1"))
+head(TD2)
+```
+
 
 
