@@ -12,10 +12,10 @@ output:
 ---
 
 # About
-The main goal of this project is to work on and refine data analysis skills. We will be building a model to predict if a blood donor will donate within a given time window. 
+In addition to refreshing data analysis skills, our goal is to build a statistical model to predict if a blood donor will donate within a given time window, which is March 2007. 
 
 # Data
-The provided datasets, `trainingData.csv` and `testData.csv` contains the following variables:
+The provided datasets, `trainingData.csv` and `testData.csv` contain the following variables:
 
 - `X1`: ID of donor.
 - `Months since Last Donation`: Number of months since the donor's most recent blood donation.
@@ -26,9 +26,10 @@ The provided datasets, `trainingData.csv` and `testData.csv` contains the follow
 
 We can view the first couple of observations of the datasets below:
 ```{r, message=FALSE, warning=FALSE}
-# Set working directory
+# Set working directory and load packages
 getwd()
 library(tidyverse)
+library(gridExtra)
 
 # Import datasets; adjust if datasets are in a different directory
 testData = read.csv("data/testData.csv", header = TRUE)
@@ -41,15 +42,13 @@ head(testData)
 Since `testData` is our testing data set, it does not have `Made Donation in March 2007` variable.
 
 ## Renaming Variables
-To make the data analysis a bit efficient, we will rename the variables:
+To make the data analysis more simple, we will rename the variables using `colnames()`:
 ```{r, message=FALSE, warning=FALSE}
-# Rename variables in testData
+# Rename variables in testData and trainingData
 colnames(testData) <- c("ID", "mosLastDo", "numDonations", "totVol", "mosFirstDo")
-
-# Rename variables in trainingData
 colnames(trainingData) <- c("ID", "mosLastDo", "numDonations", "totVol", "mosFirstDo", "madeDonation")
 
-# Display first rows of datasets
+# Display first rows of datasets (to confirm name changes)
 head(trainingData)
 head(testData)
 ```
@@ -57,13 +56,26 @@ head(testData)
 # Exploratory Data Analysis
 Since we are interested in whether the donor will donate again in March 2007, there are two possible outcomes: either they donate or do not donate. A logistic regression model is suitable for this, but we will first do some exploratory data analysis. Having a visual idea of the data will help us see if we need to do some transformations and see possible problems with our dataset.
 
+First, we need to make the binary factor `madeDonation` is read as a categorical variable. Otherwise, the `0` and `1` values will be read as continuous variables instead of two groups.  
 ```{r, message=FALSE, warning=FALSE}
 # Turn madeDonation into factors instead of continuous
 trainingData$madeDonation <- factor(trainingData$madeDonation)
-
 contrasts(trainingData$madeDonation)
-
-# Boxplot
-ggplot(data = trainingData) + geom_boxplot(aes(x = madeDonation, y = numDonations))
 ```
+
+We plot Boxplots of the two groups to see if there are any patterns:
+```{r}
+# Boxplots
+plot01 <- ggplot(data = trainingData) + geom_boxplot(aes(x = madeDonation, y = numDonations)) + labs(title = "Number of Donations", subtitle = "Made Donations vs. No Donations")
+plot02 <- ggplot(data = trainingData) + geom_boxplot(aes(x = madeDonation, y = totVol)) + labs(title = "Total Volume Donated", subtitle = "Made Donations vs. No Donations")
+plot03 <- ggplot(data = trainingData) + geom_boxplot(aes(x = madeDonation, y = mosLastDo)) + labs(title = "Months since Last Donation", subtitle = "Made Donations vs. No Donations")
+plot04 <- ggplot(data = trainingData) + geom_boxplot(aes(x = madeDonation, y = mosFirstDo)) + labs(title = "Months since First Donation", subtitle = "Made Donations vs. No Donations")
+grid.arrange(plot01, plot02, plot03, plot04, ncol = 2)
+```
+
+`numDonations` and `totVol` look similar, so we will take a look at the relationship between these two variables.
+
+## `numDonations` and `totVol`
+Below is the scatter plot between `numDonations` and `totVol`:
+
 
