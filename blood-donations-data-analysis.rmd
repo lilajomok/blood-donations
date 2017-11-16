@@ -113,8 +113,29 @@ model01 <- glm(madeDonation ~ mosLastDo + numDonations + mosFirstDo + donFreq + 
 summary(model01)
 ```
 
-At the significance level of 0.05, `mosLastDo` and `firstTime` are statistically significant.
+At the significance level of alpha = 0.05, `mosLastDo` and `firstTime` are statistically significant.
 
 - For every unit change in `mosLastDo`, the log odds of donating in March 2007 reduces by `0.09708`.
 - If the donor is a NOT first-time donor (`firstTime1`), the log odds of donating in March 2007 changes by `1.29274`.
 
+## Wald test for `firstTime`
+
+We will perform a Wald test the overall effectiveness of `firstTime`.
+```{r}
+wald.test(b = coef(model01), Sigma = vcov(model01), Terms = 5)
+```
+
+The chi-squared statistic of `2.7` with `1` degrees of freedom and a p-value of `0.098` indicates that the overall effect of `firstTime` is statistically insignificant.
+
+## Odds Ratios
+
+We can obtain the odds-ratio and 95% CI from the coefficients:
+```{r}
+exp(cbind(OR = coef(model01), confint(model01)))
+```
+
+For a unit increase in `mosLastDo`, the odds of donating in March 2007 increases by `0.9074839`.
+
+# Model Fitting
+
+Before we can start predicting with our model, we will test the Full and Reduced models with a Likelihood Ratio Test.
