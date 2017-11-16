@@ -6,8 +6,8 @@ output:
   html_document:
     toc: true
     toc_depth: 3
-    #toc_float: true
-    #theme: simplex
+    toc_float: true
+    theme: spacelab
     variant: markdown_github
 ---
 
