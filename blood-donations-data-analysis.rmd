@@ -176,7 +176,7 @@ submissionData <- select(newDF, ID, donateP)
 colnames(submissionData) = c("X1", "Made Donation in March 2007") # rename columns to submission format
 
 # Save submissionData as CSV format
-write.csv(submissionData, file = "submissionData.csv")
+write.csv(submissionData, file = "submissionData.csv", row.names = FALSE)
 
 head(submissionData)
 ```
